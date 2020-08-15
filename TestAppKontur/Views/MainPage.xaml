@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:prism="http://prismlibrary.com" xmlns:c="clr-namespace:TestAppKontur.Converters"
+             mc:Ignorable="d"
+             x:Class="TestAppKontur.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:ContactTappedSelectionChangedEvetArgs x:Key="contactTappedSelectionChangedEvetArgs"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <NavigationPage.TitleView>
+        <SearchBar x:Name="searchBar" Placeholder="Поиск" BackgroundColor="White" Margin="0,2,15,1"                   
+                   >
+            <SearchBar.Behaviors>
+                <prism:EventToCommandBehavior EventName="TextChanged"
+                                              Command="{Binding PerformSearchCommand}"
+                                              CommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+            </SearchBar.Behaviors>
+        </SearchBar>
+    </NavigationPage.TitleView>
+    <RefreshView IsRefreshing="{Binding IsLoading}"
+                 Command="{Binding UpdateContactsCommand}">
+        <CollectionView ItemsSource="{Binding SearchResults}" SelectionMode="Single">
+            <CollectionView.Behaviors>
+                <prism:EventToCommandBehavior EventName="SelectionChanged"
+                                              Command="{Binding ContactTappedCommand}"
+                                              EventArgsConverter="{StaticResource contactTappedSelectionChangedEvetArgs}"/>
+            </CollectionView.Behaviors>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ContentView>
+                        <StackLayout>
+                            <Grid ColumnDefinitions="100*, 30*" RowDefinitions="Auto, Auto, 1"
+                                  Margin="15,10">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}"/>
+                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Height}" HorizontalOptions="EndAndExpand"/>
+                                <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Phone}"/>
+                            </Grid>
+                            <BoxView Grid.ColumnSpan="2" Grid.Row="2" HeightRequest="1" BackgroundColor="LightGray"/>
+                        </StackLayout>
+                    </ContentView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:c="clr-namespace:TestAppKontur.Converters" xmlns:local="clr-namespace:TestAppKontur.ViewModels"
+             mc:Ignorable="d"
+             x:Class="TestAppKontur.Views.ContactPage"
+             x:Name="ContactPageVM">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:EducationPeriodToStringConverter x:Key="educationPeriodToStringConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Margin="15">
+            <Label Text="{Binding CurrentContact.Name}" TextColor="Black" FontSize="Large"/>
+            <Label Text="{Binding CurrentContact.Phone}" TextColor="#00a1fa" TextDecorations="Underline">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CallCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Text="{Binding CurrentContact.Temperament}"/>
+            <Label Text="{Binding CurrentContact.EducationPeriod, Converter={StaticResource educationPeriodToStringConverter}}"/>
+            <Label Text="{Binding CurrentContact.Biography}" TextColor="Black" LineBreakMode="WordWrap"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

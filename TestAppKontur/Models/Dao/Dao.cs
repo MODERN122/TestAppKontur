@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,9 +56,9 @@ namespace TestAppKontur.Models.Dao
             var results = new List<Contact>();
             foreach (var strQuery in query.Split(' '))
             {
-                results.AddRange(ContactList.Where(x => (x.Name.Contains(strQuery) || 
+                results.AddRange(ContactList.Where(x => (x.Name.Contains(strQuery) ||
                     string.Join("", x.Phone.Where(c => char.IsDigit(c))).Contains(strQuery))
-                        &&!results.Any(y=>y==x)));
+                        && !results.Any(y => y == x)));
             }
             return results;
         }
@@ -67,16 +68,22 @@ namespace TestAppKontur.Models.Dao
             {
                 //Если необходимо ошибку вызвать
                 //throw new HttpListenerException();
-                string json;
+                string json1;
+                string json2;
+                string json3;
                 using (WebClient client = new WebClient())
                 {
-                    json = client.DownloadString($"https://raw.githubusercontent.com/Newbilius/" +
-                        $"ElbaMobileXamarinDeveloperTest/master/json/generated-01.json");
+                    var baseAddress = "https://raw.githubusercontent.com/Newbilius/ElbaMobileXamarinDeveloperTest/master/json/";
+                    json1 = client.DownloadString($"{baseAddress}generated-01.json");
+                    json2 = client.DownloadString($"{baseAddress}generated-02.json");
+                    json3 = client.DownloadString($"{baseAddress}generated-03.json");
                 }
 
                 // using newtonsoft json.net - use http://json2csharp.com/ to verfiy
                 // that your C# model class actually matches your json
-                var data = JsonConvert.DeserializeObject<List<Contact>>(json);
+                var data = JsonConvert.DeserializeObject<List<Contact>>(json1);
+                data.AddRange(JsonConvert.DeserializeObject<List<Contact>>(json2));
+                data.AddRange(JsonConvert.DeserializeObject<List<Contact>>(json3));
                 _db.ClearDbAsync();
                 foreach (Contact contact in data)
                 {

@@ -32,7 +32,7 @@ namespace TestAppKontur.Models.Data
             {
                 x.EducationPeriod = dictEduPeriods[x.EducationPeriodId];
             });
-            return contacts;
+            return contacts.OrderBy(x=>x.Name).ToList();
         }
         public Task<int> SaveItemAsync<T>(T item, bool IsUpdated)
         {

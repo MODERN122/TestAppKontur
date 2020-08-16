@@ -100,10 +100,10 @@ namespace TestAppKontur.ViewModels
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
-            UpdateContacts();
+            //UpdateContacts();
             //Активирую таймер, 
             cancellation = new CancellationTokenSource();
-            Device.StartTimer(TimeSpan.FromSeconds(60.0), () =>
+            Device.StartTimer(TimeSpan.FromSeconds(10.0), () =>
             {
                 if (cancellation.IsCancellationRequested)
                     return false;

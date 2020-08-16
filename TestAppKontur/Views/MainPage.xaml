@@ -11,8 +11,12 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <NavigationPage.TitleView>
-        <SearchBar x:Name="searchBar" Placeholder="Поиск" BackgroundColor="White" Margin="0,2,15,1"                   
-                   >
+        <SearchBar x:Name="searchBar" Placeholder="Поиск" BackgroundColor="White">
+            <SearchBar.Margin>
+                <OnPlatform x:TypeArguments="Thickness"
+                            iOS="0,0,0,0"
+                            Android="0,2,15,1"/>
+            </SearchBar.Margin>
             <SearchBar.Behaviors>
                 <prism:EventToCommandBehavior EventName="TextChanged"
                                               Command="{Binding PerformSearchCommand}"

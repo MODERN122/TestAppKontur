@@ -53,12 +53,11 @@ namespace TestAppKontur.Models.Dao
         }
         public static List<Contact> GetSearchResults(string query)
         {
-            var results = new List<Contact>();
+            var results = ContactList;
             foreach (var strQuery in query.Split(' '))
             {
-                results.AddRange(ContactList.Where(x => (x.Name.Contains(strQuery) ||
-                    string.Join("", x.Phone.Where(c => char.IsDigit(c))).Contains(strQuery))
-                        && !results.Any(y => y == x)));
+                results = results.Where(x => (x.Name.Contains(strQuery) ||
+                    string.Join("", x.Phone.Where(c => char.IsDigit(c))).Contains(strQuery))).ToList();
             }
             return results;
         }
@@ -94,7 +93,7 @@ namespace TestAppKontur.Models.Dao
                 }
                 await _db.SaveAllItemsAsync(data.Select(x => x.EducationPeriod), isUpdated);
                 await _db.SaveAllItemsAsync(data, isUpdated);
-                ContactList = data;
+                ContactList = data.OrderBy(x=>x.Name).ToList();
                 return true;
             }
             catch
